@@ -1,7 +1,7 @@
 {
-    "name": "interactive-dotted-map",
+    "name": "europe-dot-map",
     "version": "1.0.0",
-    "description": "An interactive dotted map of Europe with customizable country highlighting",
+    "description": "Interactive European Dot Map",
     "main": "server.js",
     "scripts": {
         "start": "node server.js",
@@ -27,5 +27,8 @@
     "dependencies": {
         "express": "^4.18.2",
         "dotted-map": "^3.0.0"
+    },
+    "engines": {
+        "node": "18.x"
     }
 }

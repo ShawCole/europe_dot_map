@@ -1,10 +1,14 @@
 const express = require('express');
-const app = express();
 const path = require('path');
-const port = 8000;
+const fs = require('fs');
+const DottedMap = require('dotted-map').default;
 
+const app = express();
+const port = process.env.PORT || 8000;
+
+// Serve static files from the root directory
+app.use(express.static(__dirname));
 app.use(express.json());
-app.use(express.static('.'));
 
 // List of EU country codes
 const EU_COUNTRIES = [
@@ -13,52 +17,59 @@ const EU_COUNTRIES = [
     'POL', 'PRT', 'ROU', 'SVK', 'SVN', 'ESP', 'SWE'
 ];
 
-// Explicitly serve index.html at the root
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+// Generate initial map on server start
+function generateMap(config = {}) {
+    const map = new DottedMap({
+        height: 60,
+        grid: 'vertical',
+        regionBounds: {
+            lat: [35, 72],
+            lng: [-25, 45]
+        }
+    });
+
+    // Default settings if not provided
+    const settings = {
+        regularDotColor: '#4761BF',
+        regularDotSize: 0.22,
+        euDotColor: '#4761BF',
+        euDotSize: 0.32,
+        highlightDotColor: '#48b7ff',
+        highlightDotSize: 0.32,
+        highlightedCountry: 'DEU'
+    };
+
+    // Merge provided config with defaults
+    Object.assign(settings, config);
+
+    // Generate the SVG
+    const svgString = map.getSVG({
+        radius: settings.regularDotSize,
+        color: settings.regularDotColor,
+        backgroundColor: 'none'
+    });
+
+    return svgString;
+}
+
+// Serve the initial SVG
+app.get('/europe_map.svg', (req, res) => {
+    const svg = generateMap();
+    res.setHeader('Content-Type', 'image/svg+xml');
+    res.send(svg);
 });
 
+// Handle map updates
 app.post('/update-map', (req, res) => {
-    try {
-        const { highlightedCountry, regularDotColor, regularDotSize, euDotColor, euDotSize, highlightDotColor, highlightDotSize } = req.body;
+    const config = req.body;
+    const svg = generateMap(config);
+    res.setHeader('Content-Type', 'image/svg+xml');
+    res.send(svg);
+});
 
-        // Update the countryConfig in Dot_Map_Generation
-        const { countryConfig, generateMap } = require('./Dot_Map_Generation');
-
-        // Update all countries based on their EU membership
-        Object.keys(countryConfig).forEach(code => {
-            if (code === highlightedCountry) {
-                // Highlighted country gets highlight settings
-                countryConfig[code] = {
-                    color: highlightDotColor,
-                    dotSize: highlightDotSize
-                };
-            } else if (EU_COUNTRIES.includes(code)) {
-                // EU countries get EU settings
-                countryConfig[code] = {
-                    color: euDotColor,
-                    dotSize: euDotSize
-                };
-            } else {
-                // Non-EU countries get regular settings
-                countryConfig[code] = {
-                    color: regularDotColor,
-                    dotSize: regularDotSize
-                };
-            }
-        });
-
-        // Regenerate the map
-        generateMap();
-
-        // Read and send the new SVG
-        const fs = require('fs');
-        const svgContent = fs.readFileSync('europe_map.svg', 'utf8');
-        res.send(svgContent);
-    } catch (error) {
-        console.error('Error updating map:', error);
-        res.status(500).send('Error updating map: ' + error.message);
-    }
+// Serve index.html for the root route
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.listen(port, () => {

@@ -1,0 +1,31 @@
+{
+    "name": "interactive-dotted-map",
+    "version": "1.0.0",
+    "description": "An interactive dotted map of Europe with customizable country highlighting",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/yourusername/interactive-dotted-map.git"
+    },
+    "keywords": [
+        "map",
+        "europe",
+        "interactive",
+        "svg",
+        "visualization"
+    ],
+    "author": "Your Name",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/yourusername/interactive-dotted-map/issues"
+    },
+    "homepage": "https://github.com/yourusername/interactive-dotted-map#readme",
+    "dependencies": {
+        "express": "^4.18.2",
+        "dotted-map": "^3.0.0"
+    }
+}

@@ -1,0 +1,254 @@
+2025-04-03 16:25:30,272 - ERROR - Port 8000 is already in use. Please kill the existing process or use a different port.
+2025-04-03 16:25:30,287 - INFO - Attempted to kill existing server process
+2025-04-03 16:29:41,640 - INFO - Server running at http://localhost:8000/
+2025-04-03 16:29:43,103 - INFO - Received GET request to /
+2025-04-03 16:29:48,151 - INFO - Received POST request to /update-settings
+2025-04-03 16:29:48,152 - INFO - Received settings: {
+  "highlightedCountry": "CZE",
+  "regularColor": "#cccccc",
+  "regularSize": "0.2",
+  "euColor": "#4761bf",
+  "euSize": "0.26",
+  "highlightColor": "#48b7ff",
+  "highlightSize": "0.32"
+}
+2025-04-03 16:29:48,152 - INFO - Running Dot_Map_Generation.js with country: CZE
+2025-04-03 16:29:48,595 - INFO - Script output: 
+2025-04-03 16:29:48,595 - INFO - Successfully sent 200 response
+2025-04-03 16:29:48,609 - INFO - Received GET request to /
+2025-04-03 16:29:52,506 - INFO - Received POST request to /update-settings
+2025-04-03 16:29:52,507 - INFO - Received settings: {
+  "highlightedCountry": "IRL",
+  "regularColor": "#cccccc",
+  "regularSize": "0.2",
+  "euColor": "#4761bf",
+  "euSize": "0.26",
+  "highlightColor": "#48b7ff",
+  "highlightSize": "0.32"
+}
+2025-04-03 16:29:52,507 - INFO - Running Dot_Map_Generation.js with country: IRL
+2025-04-03 16:29:52,784 - INFO - Script output: 
+2025-04-03 16:29:52,784 - INFO - Successfully sent 200 response
+2025-04-03 16:29:52,800 - INFO - Received GET request to /
+2025-04-03 16:30:11,929 - INFO - Received POST request to /update-settings
+2025-04-03 16:30:11,930 - INFO - Received settings: {
+  "highlightedCountry": "BGR",
+  "regularColor": "#cccccc",
+  "regularSize": "0.2",
+  "euColor": "#4761bf",
+  "euSize": "0.26",
+  "highlightColor": "#48b7ff",
+  "highlightSize": "0.32"
+}
+2025-04-03 16:30:11,931 - INFO - Running Dot_Map_Generation.js with country: BGR
+2025-04-03 16:30:12,384 - INFO - Script output: 
+2025-04-03 16:30:12,385 - INFO - Successfully sent 200 response
+2025-04-03 16:30:12,400 - INFO - Received GET request to /
+2025-04-03 16:33:50,134 - INFO - Received POST request to /update-settings
+2025-04-03 16:33:50,152 - INFO - Received settings: {
+  "highlightedCountry": "HRV",
+  "regularColor": "#cccccc",
+  "regularSize": "0.2",
+  "euColor": "#4761bf",
+  "euSize": "0.26",
+  "highlightColor": "#48b7ff",
+  "highlightSize": "0.32"
+}
+2025-04-03 16:33:50,154 - INFO - Running Dot_Map_Generation.js with country: HRV
+2025-04-03 16:33:50,595 - INFO - Script output: 
+2025-04-03 16:33:50,595 - INFO - Successfully sent 200 response
+2025-04-03 16:33:50,609 - INFO - Received GET request to /
+2025-04-03 16:33:53,175 - INFO - Received GET request to /
+2025-04-03 16:33:55,534 - INFO - Received POST request to /update-settings
+2025-04-03 16:33:55,535 - INFO - Received settings: {
+  "highlightedCountry": "HRV",
+  "regularColor": "#cccccc",
+  "regularSize": "0.2",
+  "euColor": "#4761bf",
+  "euSize": "0.26",
+  "highlightColor": "#48b7ff",
+  "highlightSize": "0.32"
+}
+2025-04-03 16:33:55,535 - INFO - Running Dot_Map_Generation.js with country: HRV
+2025-04-03 16:33:55,867 - INFO - Script output: 
+2025-04-03 16:33:55,867 - INFO - Successfully sent 200 response
+2025-04-03 16:33:57,885 - INFO - Received GET request to /
+2025-04-03 16:34:00,896 - INFO - Received POST request to /update-settings
+2025-04-03 16:34:00,897 - INFO - Received settings: {
+  "highlightedCountry": "CYP",
+  "regularColor": "#cccccc",
+  "regularSize": "0.2",
+  "euColor": "#4761bf",
+  "euSize": "0.26",
+  "highlightColor": "#48b7ff",
+  "highlightSize": "0.32"
+}
+2025-04-03 16:34:00,897 - INFO - Running Dot_Map_Generation.js with country: CYP
+2025-04-03 16:34:01,179 - INFO - Script output: 
+2025-04-03 16:34:01,179 - INFO - Successfully sent 200 response
+2025-04-03 16:34:03,206 - INFO - Received GET request to /
+2025-04-03 16:34:06,069 - INFO - Received POST request to /update-settings
+2025-04-03 16:34:06,071 - INFO - Received settings: {
+  "highlightedCountry": "HUN",
+  "regularColor": "#cccccc",
+  "regularSize": "0.2",
+  "euColor": "#4761bf",
+  "euSize": "0.26",
+  "highlightColor": "#48b7ff",
+  "highlightSize": "0.32"
+}
+2025-04-03 16:34:06,071 - INFO - Running Dot_Map_Generation.js with country: HUN
+2025-04-03 16:34:06,409 - INFO - Script output: 
+2025-04-03 16:34:06,409 - INFO - Successfully sent 200 response
+2025-04-03 16:34:08,455 - INFO - Received GET request to /
+2025-04-03 16:36:04,851 - ERROR - Port 8000 is already in use. Please kill the existing process or use a different port.
+2025-04-03 16:36:04,869 - INFO - Attempted to kill existing server process
+2025-04-03 16:36:10,357 - INFO - Received GET request to /
+2025-04-03 16:36:13,621 - INFO - Received POST request to /update-settings
+2025-04-03 16:36:13,622 - INFO - Received settings: {
+  "highlightedCountry": "EST",
+  "regularColor": "#cccccc",
+  "regularSize": "0.2",
+  "euColor": "#4761bf",
+  "euSize": "0.26",
+  "highlightColor": "#48b7ff",
+  "highlightSize": "0.32"
+}
+2025-04-03 16:36:13,623 - INFO - Running Dot_Map_Generation.js with country: EST
+2025-04-03 16:36:14,098 - INFO - Script output: Using settings: {
+  regularColor: '#cccccc',
+  regularSize: 0.2,
+  euColor: '#4761bf',
+  euSize: 0.26,
+  highlightColor: '#48b7ff',
+  highlightSize: 0.32
+}
+Map generated successfully
+
+2025-04-03 16:36:14,098 - INFO - Successfully sent 200 response
+2025-04-03 16:36:16,147 - INFO - Received GET request to /
+2025-04-03 16:36:19,240 - INFO - Received POST request to /update-settings
+2025-04-03 16:36:19,241 - INFO - Received settings: {
+  "highlightedCountry": "CYP",
+  "regularColor": "#cccccc",
+  "regularSize": "0.2",
+  "euColor": "#4761bf",
+  "euSize": "0.26",
+  "highlightColor": "#48b7ff",
+  "highlightSize": "0.32"
+}
+2025-04-03 16:36:19,241 - INFO - Running Dot_Map_Generation.js with country: CYP
+2025-04-03 16:36:19,585 - INFO - Script output: Using settings: {
+  regularColor: '#cccccc',
+  regularSize: 0.2,
+  euColor: '#4761bf',
+  euSize: 0.26,
+  highlightColor: '#48b7ff',
+  highlightSize: 0.32
+}
+Map generated successfully
+
+2025-04-03 16:36:19,585 - INFO - Successfully sent 200 response
+2025-04-03 16:36:21,752 - INFO - Received GET request to /
+2025-04-03 16:36:56,238 - ERROR - Port 8000 is already in use. Please kill the existing process or use a different port.
+2025-04-03 16:36:56,345 - INFO - Attempted to kill existing server process
+2025-04-03 16:37:55,717 - INFO - Received POST request to /update-settings
+2025-04-03 16:37:55,717 - INFO - Received settings: {
+  "highlightedCountry": "HRV",
+  "regularColor": "#cccccc",
+  "regularSize": "0.2",
+  "euColor": "#4761bf",
+  "euSize": "0.26",
+  "highlightColor": "#48b7ff",
+  "highlightSize": "0.32"
+}
+2025-04-03 16:37:55,717 - INFO - Running Dot_Map_Generation.js with country: HRV
+2025-04-03 16:37:56,176 - INFO - Script output: Using settings: {
+  regularColor: '#cccccc',
+  regularSize: 0.2,
+  euColor: '#4761bf',
+  euSize: 0.26,
+  highlightColor: '#48b7ff',
+  highlightSize: 0.32
+}
+Map generated successfully
+
+2025-04-03 16:37:56,177 - INFO - Successfully sent 200 response
+2025-04-03 16:37:58,207 - INFO - Received GET request to /
+2025-04-03 16:38:05,897 - INFO - Received GET request to /
+2025-04-03 16:38:08,534 - INFO - Received POST request to /update-settings
+2025-04-03 16:38:08,535 - INFO - Received settings: {
+  "highlightedCountry": "DNK",
+  "regularColor": "#cccccc",
+  "regularSize": "0.2",
+  "euColor": "#4761bf",
+  "euSize": "0.26",
+  "highlightColor": "#48b7ff",
+  "highlightSize": "0.32"
+}
+2025-04-03 16:38:08,535 - INFO - Running Dot_Map_Generation.js with country: DNK
+2025-04-03 16:38:08,982 - INFO - Script output: Using settings: {
+  regularColor: '#cccccc',
+  regularSize: 0.2,
+  euColor: '#4761bf',
+  euSize: 0.26,
+  highlightColor: '#48b7ff',
+  highlightSize: 0.32
+}
+Map generated successfully
+
+2025-04-03 16:38:08,982 - INFO - Successfully sent 200 response
+2025-04-03 16:38:14,009 - INFO - Received GET request to /
+2025-04-03 16:40:03,469 - ERROR - Port 8000 is already in use. Please kill the existing process or use a different port.
+2025-04-03 16:40:03,500 - INFO - Attempted to kill existing server process
+2025-04-03 16:40:18,425 - INFO - Received GET request to /
+2025-04-03 16:40:22,232 - INFO - Received POST request to /update-settings
+2025-04-03 16:40:22,237 - INFO - Received settings: {
+  "highlightedCountry": "EST",
+  "regularColor": "#cccccc",
+  "regularSize": "0.2",
+  "euColor": "#4761bf",
+  "euSize": "0.26",
+  "highlightColor": "#48b7ff",
+  "highlightSize": "0.32"
+}
+2025-04-03 16:40:22,241 - INFO - Running Dot_Map_Generation.js with country: EST
+2025-04-03 16:40:23,207 - INFO - Script output: Using settings: {
+  regularColor: '#cccccc',
+  regularSize: 0.2,
+  euColor: '#4761bf',
+  euSize: 0.26,
+  highlightColor: '#48b7ff',
+  highlightSize: 0.32
+}
+Map generated successfully
+
+2025-04-03 16:40:23,208 - INFO - Successfully sent 200 response
+2025-04-03 16:40:28,315 - INFO - Received GET request to /
+2025-04-03 16:40:33,588 - INFO - Received POST request to /update-settings
+2025-04-03 16:40:33,590 - INFO - Received settings: {
+  "highlightedCountry": "EST",
+  "regularColor": "#cccccc",
+  "regularSize": "0.2",
+  "euColor": "#4761bf",
+  "euSize": "0.26",
+  "highlightColor": "#48b7ff",
+  "highlightSize": "0.32"
+}
+2025-04-03 16:40:33,590 - INFO - Running Dot_Map_Generation.js with country: EST
+2025-04-03 16:40:34,079 - INFO - Script output: Using settings: {
+  regularColor: '#cccccc',
+  regularSize: 0.2,
+  euColor: '#4761bf',
+  euSize: 0.26,
+  highlightColor: '#48b7ff',
+  highlightSize: 0.32
+}
+Map generated successfully
+
+2025-04-03 16:40:34,080 - INFO - Successfully sent 200 response
+2025-04-03 16:40:39,105 - INFO - Received GET request to /
+2025-04-03 16:42:14,425 - INFO - Received GET request to /
+2025-04-03 16:42:49,479 - INFO - Received GET request to /
+2025-04-03 16:43:15,292 - INFO - Received GET request to /
+2025-04-03 16:43:16,840 - INFO - Received GET request to /

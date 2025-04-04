@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Dotted Map</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #FFFFFF;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .controls {
+            width: 300px;
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-group h3 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        select,
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .color-input {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .color-input input[type="color"] {
+            width: 50px;
+            padding: 0;
+            margin: 0;
+        }
+
+        .color-input input[type="text"] {
+            flex: 1;
+        }
+
+        .size-input {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .size-input input {
+            flex: 1;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #48b7ff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #3aa0e0;
+        }
+
+        .map-container {
+            flex: 1;
+            position: relative;
+            background: #FFFFFF;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        #map {
+            width: 100%;
+            height: auto;
+        }
+
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            pointer-events: none;
+            display: none;
+        }
+
+        .log-container {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .log-entry {
+            margin: 5px 0;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .button-group button {
+            flex: 1;
+            margin-top: 0;
+            font-size: 12px;
+            padding: 8px;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="controls">
+            <div class="control-group">
+                <h3>Map Controls</h3>
+                <div class="button-group">
+                    <button id="centerOnCountry">Center on Selected Country</button>
+                    <button id="centerOnEurope">Center on Europe</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <h3>Highlighted Country</h3>
+                <select id="highlightedCountry">
+                    <option value="DEU" selected>Germany</option>
+                    <option value="FRA">France</option>
+                    <option value="ITA">Italy</option>
+                    <option value="ESP">Spain</option>
+                    <option value="POL">Poland</option>
+                    <option value="AUT">Austria</option>
+                    <option value="BEL">Belgium</option>
+                    <option value="BGR">Bulgaria</option>
+                    <option value="HRV">Croatia</option>
+                    <option value="CYP">Cyprus</option>
+                    <option value="CZE">Czech Republic</option>
+                    <option value="DNK">Denmark</option>
+                    <option value="EST">Estonia</option>
+                    <option value="FIN">Finland</option>
+                    <option value="GRC">Greece</option>
+                    <option value="HUN">Hungary</option>
+                    <option value="IRL">Ireland</option>
+                    <option value="LVA">Latvia</option>
+                    <option value="LTU">Lithuania</option>
+                    <option value="LUX">Luxembourg</option>
+                    <option value="MLT">Malta</option>
+                    <option value="NLD">Netherlands</option>
+                    <option value="PRT">Portugal</option>
+                    <option value="ROU">Romania</option>
+                    <option value="SVK">Slovakia</option>
+                    <option value="SVN">Slovenia</option>
+                    <option value="SWE">Sweden</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <h3>Regular Dot Settings</h3>
+                <div class="color-input">
+                    <input type="color" id="regularDotColor" value="#4761BF">
+                    <input type="text" id="regularDotColorText" value="#4761BF">
+                </div>
+                <div class="size-input">
+                    <input type="number" id="regularDotSize" value="0.22" step="0.01" min="0.1" max="1">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <h3>EU Dot Settings</h3>
+                <div class="color-input">
+                    <input type="color" id="euDotColor" value="#4761BF">
+                    <input type="text" id="euDotColorText" value="#4761BF">
+                </div>
+                <div class="size-input">
+                    <input type="number" id="euDotSize" value="0.32" step="0.01" min="0.1" max="1">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <h3>Highlight Dot Settings</h3>
+                <div class="color-input">
+                    <input type="color" id="highlightDotColor" value="#48b7ff">
+                    <input type="text" id="highlightDotColorText" value="#48b7ff">
+                </div>
+                <div class="size-input">
+                    <input type="number" id="highlightDotSize" value="0.32" step="0.01" min="0.1" max="1">
+                </div>
+            </div>
+
+            <button id="updateMap">Update Map</button>
+
+            <div class="control-group">
+                <h3>Export Map</h3>
+                <div class="button-group">
+                    <button id="downloadSvg">Download SVG</button>
+                    <button id="downloadPng">Download PNG</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="map-container">
+            <div id="map"></div>
+            <div class="tooltip" id="tooltip"></div>
+            <div class="log-container" id="logContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        // Load the SVG map
+        fetch('europe_map.svg')
+            .then(response => response.text())
+            .then(svgContent => {
+                document.getElementById('map').innerHTML = svgContent;
+                const svg = document.querySelector('#map svg');
+                if (svg) {
+                    originalViewBox = svg.getAttribute('viewBox');
+                }
+                setupInteractivity();
+            });
+
+        function setupInteractivity() {
+            const svg = document.querySelector('#map svg');
+            const tooltip = document.getElementById('tooltip');
+            const logContainer = document.getElementById('logContainer');
+
+            // Add click event listeners to all dots
+            svg.querySelectorAll('circle').forEach(dot => {
+                dot.addEventListener('click', function (e) {
+                    const rect = svg.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    // Convert SVG coordinates to geographical coordinates
+                    const lng = (x / rect.width) * 40 - 10; // Map bounds: -10 to 30
+                    const lat = 62 - (y / rect.height) * 26; // Map bounds: 36 to 62
+
+                    logCoordinates(lat, lng, 'clicked');
+                });
+
+                // Add hover effect
+                dot.addEventListener('mouseover', function (e) {
+                    const rect = svg.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    const lng = (x / rect.width) * 40 - 10;
+                    const lat = 62 - (y / rect.height) * 26;
+
+                    tooltip.style.display = 'block';
+                    tooltip.style.left = (e.clientX + 10) + 'px';
+                    tooltip.style.top = (e.clientY + 10) + 'px';
+                    tooltip.textContent = `Lat: ${lat.toFixed(4)}, Lng: ${lng.toFixed(4)}`;
+                });
+
+                dot.addEventListener('mouseout', function () {
+                    tooltip.style.display = 'none';
+                });
+            });
+        }
+
+        function logCoordinates(lat, lng, type) {
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            logEntry.textContent = `${type} - Lat: ${lat.toFixed(4)}, Lng: ${lng.toFixed(4)}`;
+            logContainer.insertBefore(logEntry, logContainer.firstChild);
+        }
+
+        // Color input synchronization
+        document.querySelectorAll('.color-input input[type="color"]').forEach(input => {
+            input.addEventListener('input', function () {
+                this.nextElementSibling.value = this.value;
+            });
+        });
+
+        document.querySelectorAll('.color-input input[type="text"]').forEach(input => {
+            input.addEventListener('input', function () {
+                this.previousElementSibling.value = this.value;
+            });
+        });
+
+        // Update map button handler
+        document.getElementById('updateMap').addEventListener('click', function () {
+            const settings = {
+                highlightedCountry: document.getElementById('highlightedCountry').value,
+                regularDotColor: document.getElementById('regularDotColor').value,
+                regularDotSize: parseFloat(document.getElementById('regularDotSize').value),
+                euDotColor: document.getElementById('euDotColor').value,
+                euDotSize: parseFloat(document.getElementById('euDotSize').value),
+                highlightDotColor: document.getElementById('highlightDotColor').value,
+                highlightDotSize: parseFloat(document.getElementById('highlightDotSize').value)
+            };
+
+            // Send settings to backend and regenerate map
+            fetch('/update-map', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(settings)
+            })
+                .then(response => response.text())
+                .then(svgContent => {
+                    document.getElementById('map').innerHTML = svgContent;
+                    setupInteractivity();
+                })
+                .catch(error => {
+                    console.error('Error updating map:', error);
+                    alert('Failed to update map. Please try again.');
+                });
+        });
+
+        // Add these functions after the existing ones but before the event listeners
+        function getCountryCenter(countryCode) {
+            // Get all dots for the country (those with the highlight color)
+            const countryDots = Array.from(document.querySelectorAll('circle'))
+                .filter(dot => dot.getAttribute('fill') === document.getElementById('highlightDotColor').value);
+
+            if (countryDots.length === 0) return null;
+
+            // Calculate the average position
+            const sum = countryDots.reduce((acc, dot) => {
+                acc.x += parseFloat(dot.getAttribute('cx'));
+                acc.y += parseFloat(dot.getAttribute('cy'));
+                return acc;
+            }, { x: 0, y: 0 });
+
+            return {
+                x: sum.x / countryDots.length,
+                y: sum.y / countryDots.length
+            };
+        }
+
+        function centerMapOnPoint(x, y) {
+            const svg = document.querySelector('#map svg');
+            if (!svg) return;
+
+            // Get the current viewBox
+            const viewBox = svg.getAttribute('viewBox').split(' ').map(Number);
+            const width = viewBox[2];
+            const height = viewBox[3];
+
+            // Calculate new x and y positions to center on the point
+            const newX = x - width / 2;
+            const newY = y - height / 2;
+
+            // Update the viewBox
+            svg.setAttribute('viewBox', `${newX} ${newY} ${width} ${height}`);
+        }
+
+        // Store the original viewBox for resetting to Europe view
+        let originalViewBox = null;
+
+        // Add these event listeners after the existing ones
+        document.getElementById('centerOnCountry').addEventListener('click', function () {
+            const svg = document.querySelector('#map svg');
+            if (!svg) return;
+
+            // Store original viewBox if not already stored
+            if (!originalViewBox) {
+                originalViewBox = svg.getAttribute('viewBox');
+            }
+
+            const countryCode = document.getElementById('highlightedCountry').value;
+            const center = getCountryCenter(countryCode);
+
+            if (center) {
+                centerMapOnPoint(center.x, center.y);
+            }
+        });
+
+        document.getElementById('centerOnEurope').addEventListener('click', function () {
+            const svg = document.querySelector('#map svg');
+            if (!svg || !originalViewBox) return;
+
+            // Restore original viewBox
+            svg.setAttribute('viewBox', originalViewBox);
+        });
+
+        // Add these functions after the existing ones
+        function downloadSVG() {
+            const svg = document.querySelector('#map svg');
+            if (!svg) return;
+
+            // Create a clone of the SVG to avoid modifying the original
+            const svgClone = svg.cloneNode(true);
+
+            // Create a data URL
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const svgUrl = URL.createObjectURL(svgBlob);
+
+            // Create download link
+            const downloadLink = document.createElement('a');
+            downloadLink.href = svgUrl;
+            downloadLink.download = 'europe_map.svg';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            URL.revokeObjectURL(svgUrl);
+        }
+
+        function downloadPNG() {
+            const svg = document.querySelector('#map svg');
+            if (!svg) return;
+
+            // Create a clone of the SVG to avoid modifying the original
+            const svgClone = svg.cloneNode(true);
+
+            // Get the actual display size of the SVG
+            const rect = svg.getBoundingClientRect();
+            const displayWidth = rect.width;
+            const displayHeight = rect.height;
+
+            // Set a high scale factor for better quality
+            const scale = 4;
+
+            // Create a canvas with scaled dimensions
+            const canvas = document.createElement('canvas');
+            canvas.width = displayWidth * scale;
+            canvas.height = displayHeight * scale;
+            const ctx = canvas.getContext('2d');
+
+            // Set the background to white
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Create an image from the SVG
+            const img = new Image();
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+            const svgUrl = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+
+            img.onload = function () {
+                // Draw the image on the canvas at the scaled size
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                // Create download link
+                const downloadLink = document.createElement('a');
+                downloadLink.href = canvas.toDataURL('image/png', 1.0); // Maximum quality
+                downloadLink.download = 'europe_map.png';
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+            };
+
+            img.src = svgUrl;
+        }
+
+        // Add event listeners for the download buttons
+        document.getElementById('downloadSvg').addEventListener('click', downloadSVG);
+        document.getElementById('downloadPng').addEventListener('click', downloadPNG);
+    </script>
+</body>
+
+</html>

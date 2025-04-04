@@ -1,0 +1,198 @@
+const fs = require('fs');
+const DottedMap = require('dotted-map').default;
+// Or in the browser: import DottedMap from 'dotted-map';
+
+// Configuration for countries
+const countryConfig = {
+    // EU Countries
+    'AUT': { color: '#4761BF', dotSize: 0.26 },     // Austria
+    'BEL': { color: '#4761BF', dotSize: 0.26 },     // Belgium
+    'BGR': { color: '#4761BF', dotSize: 0.26 },     // Bulgaria
+    'HRV': { color: '#4761BF', dotSize: 0.26 },     // Croatia
+    'CYP': { color: '#4761BF', dotSize: 0.26 },     // Cyprus
+    'CZE': { color: '#4761BF', dotSize: 0.26 },     // Czech Republic
+    'DNK': { color: '#4761BF', dotSize: 0.26 },     // Denmark
+    'EST': { color: '#4761BF', dotSize: 0.26 },     // Estonia
+    'FIN': { color: '#4761BF', dotSize: 0.26 },     // Finland
+    'FRA': { color: '#4761BF', dotSize: 0.26 },     // France
+    'DEU': { color: '#48b7ff', dotSize: 0.32 },     // Germany - light blue
+    'GRC': { color: '#4761BF', dotSize: 0.26 },     // Greece
+    'HUN': { color: '#4761BF', dotSize: 0.26 },     // Hungary
+    'IRL': { color: '#4761BF', dotSize: 0.26 },     // Ireland
+    'ITA': { color: '#4761BF', dotSize: 0.26 },     // Italy
+    'LVA': { color: '#4761BF', dotSize: 0.26 },     // Latvia
+    'LTU': { color: '#4761BF', dotSize: 0.26 },     // Lithuania
+    'LUX': { color: '#4761BF', dotSize: 0.26 },     // Luxembourg
+    'MLT': { color: '#4761BF', dotSize: 0.26 },     // Malta
+    'NLD': { color: '#4761BF', dotSize: 0.26 },     // Netherlands
+    'POL': { color: '#4761BF', dotSize: 0.26 },     // Poland
+    'PRT': { color: '#4761BF', dotSize: 0.26 },     // Portugal
+    'ROU': { color: '#4761BF', dotSize: 0.26 },     // Romania
+    'SVK': { color: '#4761BF', dotSize: 0.26 },     // Slovakia
+    'SVN': { color: '#4761BF', dotSize: 0.26 },     // Slovenia
+    'ESP': { color: '#4761BF', dotSize: 0.26 },     // Spain
+    'SWE': { color: '#4761BF', dotSize: 0.26 },     // Sweden
+
+    // Non-EU European Countries
+    'ALB': { color: '#808080', dotSize: 0.26 },     // Albania
+    'AND': { color: '#808080', dotSize: 0.26 },     // Andorra
+    'BIH': { color: '#808080', dotSize: 0.26 },     // Bosnia and Herzegovina
+    'GBR': { color: '#808080', dotSize: 0.26 },     // United Kingdom
+    'ISL': { color: '#808080', dotSize: 0.26 },     // Iceland
+    'LIE': { color: '#808080', dotSize: 0.26 },     // Liechtenstein
+    'MKD': { color: '#808080', dotSize: 0.26 },     // North Macedonia
+    'MDA': { color: '#808080', dotSize: 0.26 },     // Moldova
+    'MCO': { color: '#808080', dotSize: 0.26 },     // Monaco
+    'MNE': { color: '#808080', dotSize: 0.26 },     // Montenegro
+    'NOR': { color: '#808080', dotSize: 0.26 },     // Norway
+    'RUS': { color: '#808080', dotSize: 0.26 },     // Russia (European part)
+    'SMR': { color: '#808080', dotSize: 0.26 },     // San Marino
+    'SRB': { color: '#808080', dotSize: 0.26 },     // Serbia
+    'CHE': { color: '#808080', dotSize: 0.26 },     // Switzerland
+    'TUR': { color: '#808080', dotSize: 0.26 },     // Turkey (European part)
+    'UKR': { color: '#808080', dotSize: 0.26 },     // Ukraine
+    'VAT': { color: '#808080', dotSize: 0.26 },     // Vatican City
+    'BLR': { color: '#808080', dotSize: 0.26 }      // Belarus
+};
+
+// Function to load a country's GeoJSON data
+function loadCountryGeoJSON(isoCode) {
+    try {
+        const geoJSON = JSON.parse(fs.readFileSync(`countries/${isoCode}.geo.json`, 'utf8'));
+        const geometry = geoJSON.features[0].geometry;
+
+        // Handle both Polygon and MultiPolygon types
+        if (geometry.type === 'Polygon') {
+            return [geometry.coordinates[0]]; // Return as array of polygons
+        } else if (geometry.type === 'MultiPolygon') {
+            return geometry.coordinates.map(poly => poly[0]); // Extract each polygon
+        } else {
+            console.error(`Unsupported geometry type for ${isoCode}: ${geometry.type}`);
+            return null;
+        }
+    } catch (error) {
+        console.error(`Failed to load GeoJSON for ${isoCode}:`, error.message);
+        return null;
+    }
+}
+
+// Function to check if a point is inside a polygon using ray casting algorithm
+function isPointInPolygon(point, polygon) {
+    let inside = false;
+    for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+        const xi = polygon[i][0], yi = polygon[i][1];
+        const xj = polygon[j][0], yj = polygon[j][1];
+        const intersect = ((yi > point[1]) !== (yj > point[1]))
+            && (point[0] < (xj - xi) * (point[1] - yi) / (yj - yi) + xi);
+        if (intersect) inside = !inside;
+    }
+    return inside;
+}
+
+// Function to get bounds of multiple polygons
+function getPolygonsBounds(polygons) {
+    return polygons.reduce((totalBounds, polygon) => {
+        const bounds = polygon.reduce((bounds, coord) => {
+            bounds.lat.min = Math.min(bounds.lat.min, coord[1]);
+            bounds.lat.max = Math.max(bounds.lat.max, coord[1]);
+            bounds.lng.min = Math.min(bounds.lng.min, coord[0]);
+            bounds.lng.max = Math.max(bounds.lng.max, coord[0]);
+            return bounds;
+        }, {
+            lat: { min: 90, max: -90 },
+            lng: { min: 180, max: -180 }
+        });
+
+        // Combine with total bounds
+        totalBounds.lat.min = Math.min(totalBounds.lat.min, bounds.lat.min);
+        totalBounds.lat.max = Math.max(totalBounds.lat.max, bounds.lat.max);
+        totalBounds.lng.min = Math.min(totalBounds.lng.min, bounds.lng.min);
+        totalBounds.lng.max = Math.max(totalBounds.lng.max, bounds.lng.max);
+        return totalBounds;
+    }, {
+        lat: { min: 90, max: -90 },
+        lng: { min: 180, max: -180 }
+    });
+}
+
+function generateMap() {
+    // Create the map
+    const map = new DottedMap({
+        height: 140,
+        grid: 'diagonal',
+        region: {
+            lat: { min: 36, max: 62 },  // Focused on continental Europe
+            lng: { min: -10, max: 30 }
+        }
+    });
+
+    // Add major European cities
+    const cities = [
+        // Add your cities here
+    ];
+
+    // Process each configured country
+    Object.entries(countryConfig).forEach(([isoCode, config]) => {
+        const countryPolygons = loadCountryGeoJSON(isoCode);
+        if (!countryPolygons) return;
+
+        const bounds = getPolygonsBounds(countryPolygons);
+
+        // Create a dense grid of dots for the country
+        const stepSize = 0.1; // Approximately 11km at these latitudes
+        for (let lat = bounds.lat.min; lat <= bounds.lat.max; lat += stepSize) {
+            for (let lng = bounds.lng.min; lng <= bounds.lng.max; lng += stepSize) {
+                // Check if point is inside any of the country's polygons
+                if (countryPolygons.some(polygon => isPointInPolygon([lng, lat], polygon))) {
+                    map.addPin({
+                        lat: lat,
+                        lng: lng,
+                        svgOptions: {
+                            color: config.color,
+                            radius: config.dotSize
+                        }
+                    });
+                }
+            }
+        }
+    });
+
+    // Add pins for each city
+    cities.forEach(city => {
+        map.addPin({
+            lat: city.lat,
+            lng: city.lng,
+            svgOptions: {
+                color: '#808080',
+                radius: 0.4
+            }
+        });
+    });
+
+    // Generate the SVG
+    let svgMap = map.getSVG({
+        radius: 0.20,
+        color: '#1838ad',
+        shape: 'circle',
+        backgroundColor: 'transparent'
+    });
+
+    // Clean up the SVG
+    svgMap = svgMap.replace(/style="[^"]*"/g, '');
+    svgMap = svgMap.replace(/<rect[^>]*>/g, '');
+    svgMap = svgMap.replace(/<svg/, '<svg fill="none" style="background: #FFFFFF"');
+
+    // Save the SVG file
+    fs.writeFileSync('europe_map.svg', svgMap);
+
+    console.log('Map has been generated as europe_map.svg');
+}
+
+// Generate initial map
+generateMap();
+
+// Export for use in server.js
+module.exports = {
+    countryConfig,
+    generateMap
+};
